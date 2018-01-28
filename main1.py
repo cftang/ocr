@@ -10,12 +10,12 @@ from sys import stdout
 
 time_start = time.time()
 
-#question, answers = problem_utils.get_result()
+question, answers = problem_utils.get_result()
 #question = u'十年树木，百年树人是谁说的'
 #answers = [u'管仲',u'齐桓公',u'鲍叔牙']
 
-question = u'可以跳"掌中舞"的美女是谁'
-answers = [u'貂蝉',u'赵飞燕',u'杨玉环']
+#question = u'可以跳"掌中舞"的美女是谁'
+#answers = [u'貂蝉',u'赵飞燕',u'杨玉环']
 
 print(u"问题 ：" + question)
 if not answers:

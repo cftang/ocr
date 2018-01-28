@@ -4,112 +4,78 @@
 from aip import AipOcr
 from PIL import ImageGrab
 import config
+import json
 from PIL import Image
-import os
-import sys
-import subprocess
-
+import matplotlib.pyplot as plt
+import datetime
 client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+import os
 
-
-# 通过adb获取android图像
+#通过adb获取android图像
 def get_android_img():
-    os.system('adb shell screencap -p /sdcard/screen.png')
-    os.system('adb pull /sdcard/screen.png ' + config.IMAGE_PAGE)
-    im = Image.open(config.IMAGE_PAGE)
-    im = im.convert('RGB')
-    im.save(config.IMAGE_PAGE)
+    os.system('adb shell screencap -p /sdcard/screenshot.png')
+    os.system('adb pull /sdcard/screenshot.png .')
+    crop()
 
-
-#  TODO WDA获取图像
+#获取ios图像
 def get_ios_img():
+    import shutil
+    import os
+    import time
+    import wda
+    from PIL import Image
+
+    c = wda.Client('http://169.254.19.2:8100')  # DEVICE_URL
+    #c = wda.Client('http://192.168.3.11:8100')  # DEVICE_URL
+
+    c.screenshot('1.png')
+
+    screenshot_backup_dir = 'screenshot_backups/'
+    if not os.path.isdir(screenshot_backup_dir):
+        os.mkdir(screenshot_backup_dir)
+
+    img = Image.open('1.png')
+    width, height = img.size
+    # 冲顶大会
+    newHeight = int(height * 0.65)
+
+    # （left, upper, right, lower）
+
+    box = (0, 300, width, newHeight)
+    region = img.crop(box)
+    region.save(config.IMAGE_PAGE)
+
+    ts = int(time.time())
+    shutil.copy(config.IMAGE_PAGE, '{}{}.png'.format(screenshot_backup_dir, ts))
+
+def get_ios_img2():
     img = ImageGrab.grab()
-    img.save(config.IMAGE_PAGE)
+    #TODO 截取区域可以调整
+    box = (0, 300, 850, 1000)
+    img = img.crop(box)
+    img.save(config.IMAGE_PAGE_TEMP)
+
+#裁剪图像
+def crop():
+    img = Image.open(config.IMAGE_PAGE)
+    plt.figure("beauty")
+    plt.subplot(1, 2, 1), plt.title('origin')
+    plt.imshow(img), plt.axis('off')
+    #TODO 截取区域可以调整
+    box = (0, 300, 760, 900)
+    roi = img.crop(box)
+    roi.save(config.IMAGE_PAGE_TEMP);
 
 
-# 投影到桌面进行截图
-def get_pc_img(window_cap, box):
-    if window_cap:
-        assert sys.platform == 'win32', 'Platform is not Windows'
-        command = ['windowcap.exe', config.PC_WINDOW_CONFIG]
-        if not config.PC_WINDOW_FALLBACK:
-            command.append(config.IMAGE_PAGE)
-        output = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
-        if output:
-            if output.startswith('('):
-                img = ImageGrab.grab(eval(output))
-                img.save(config.IMAGE_PAGE)
-            else:
-                raise ValueError(output)
-        crop(config.IMAGE_PAGE, get_box_by_image(config.IMAGE_PAGE, config.GET_FACTOR))
-    else:
-        img = ImageGrab.grab(box)
-        img.save(config.IMAGE_PAGE_TEMP)
-
-
-# 裁剪图像
-def crop(img_path, box):
-    img = Image.open(img_path)
-    # plt.figure("beauty")
-    # plt.subplot(1, 2, 1), plt.title('origin')
-    # plt.imshow(img), plt.axis('off')
-    # TODO 截取区域可以调整
-    im_crop = img.crop(box)
-    im_crop.save(config.IMAGE_PAGE_TEMP)
-    img.close()
-
-
-def get_box_by_image(img_path, upper_crop_factor):
-    im = Image.open(img_path)
-    pixels = im.load()
-    w, h = im.size
-    # Count the number of white pixels at the y-axis
-    # Find the index and last index of pixel count which is greater than or equal to 80% of the screen width
-    upper = lower = -1
-    # From top to bottom
-    for y in range(h):
-        white_pixel_count = 0
-        for x in range(w):
-            if all([c > 240 for c in pixels[x, y]]):
-                white_pixel_count += 1
-        if white_pixel_count >= int(0.8 * w):
-            upper = y
-            break
-    # From bottom to top
-    for y in range(h - 1, -1, -1):
-        white_pixel_count = 0
-        for x in range(w):
-            if all([c > 240 for c in pixels[x, y]]):
-                white_pixel_count += 1
-        if white_pixel_count >= int(0.8 * w):
-            lower = y
-            break
-
-    if upper == -1 or upper == lower:
-        raise ValueError(u'不能确定图片上的答题区域'.encode(sys.stdout.encoding))
-    # Cut down a small percent of the box height
-    upper += upper_crop_factor * (lower - upper)
-    im.close()
-    return 0, upper, w, lower
-
-
-# 百度ocr获取图片位置
+#百度ocr获取图片位置
 def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
         return fp.read()
 
-
-# 识别文字
+#识别文字
 def spot():
-    if config.GET_DEVICE_TYPE == config.TYPE_PC:
-        get_pc_img(config.PC_USE_WINDOW_CAPTURE, config.PC_CROP_BOX)
-    else:
-        if config.GET_DEVICE_TYPE == config.TYPE_ANDROID:
-            get_android_img()
-        elif config.GET_DEVICE_TYPE == config.TYPE_IOS:
-            get_ios_img()
-        else:
-            raise ValueError('Unknown device type')
-        crop(config.IMAGE_PAGE, get_box_by_image(config.IMAGE_PAGE, config.GET_FACTOR))
-    image = get_file_content(config.IMAGE_PAGE_TEMP)
-    return client.basicGeneral(image)
+    get_ios_img();
+    #crop();
+    image = get_file_content(config.IMAGE_PAGE);
+    result = client.basicGeneral(image);
+    return result
