@@ -10,7 +10,10 @@ from sys import stdout
 
 time_start = time.time()
 
-question, answers = problem_utils.get_result()
+#question, answers = problem_utils.get_result()
+question = u'以下哪个人不是中国著名画家'
+answers = [u'范曾',u'王世襄',u'黄永玉']
+
 #question = u'十年树木，百年树人是谁说的'
 #answers = [u'管仲',u'齐桓公',u'鲍叔牙']
 
@@ -64,7 +67,7 @@ for x in as_completed(futures):
         minValue=min(x.result())
         for i in range(3):
             if minValue == x.result()[i]:
-                print('choose ' + str(i+1))
+                print('choose ----' + str(i+1))
                 break    
     else:
         for i in range(3):
@@ -72,6 +75,6 @@ for x in as_completed(futures):
         maxValue=max(x.result())
         for i in range(3):
             if maxValue == x.result()[i]:
-                print('choose ' + str(i+1))
+                print('choose ----' + str(i+1))
                 break    
 print(u'耗时：%s s' % (time.time() - time_start))
