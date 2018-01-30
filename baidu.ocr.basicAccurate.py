@@ -8,8 +8,9 @@ import json
 from PIL import Image
 import matplotlib.pyplot as plt
 import datetime
-client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+import time
 import os
+client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
 
 #通过adb获取android图像
 def get_android_img():
@@ -73,7 +74,10 @@ def get_file_content(filePath):
         return fp.read()
 
 #识别文字
-image = get_file_content('C:/Users/wisdom/Downloads/2018-01-22 203722.png');
+image = get_file_content('C:/Users/wisdom/Downloads/chongding.jpg');
+time1=time.time()
 #result = client.basicGeneral(image);
 result = client.basicAccurate(image);
+time2=time.time()
 print(result)
+print (time2-time1)
