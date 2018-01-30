@@ -80,7 +80,6 @@ time2 = time.time()
 print(time2-time1)
 
 for item in retgeneralocr['items']:
-    print('-------')
     line = ''
     for word in item['words']:
         line += word['character'].encode('iso8859-1').decode('utf-8')

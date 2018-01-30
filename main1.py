@@ -32,7 +32,7 @@ if config.OPEN_BROWSER:
     solve_utils.open_webpage(question)
 
 # 判断否定
-is_opposite = (question.find(u"不") != -1)
+is_opposite = (question.find(u"不") != -1 or question.find(u"错误") != -1)
 # 验证否定是否合法
 if is_opposite:
     # 不字前后没有未闭合的双引号或者书名号

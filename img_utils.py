@@ -74,7 +74,7 @@ def get_file_content(filePath):
 
 #识别文字
 def spot():
-    get_ios_img();
+    #get_ios_img();
     #crop();
     image = get_file_content(config.IMAGE_PAGE);
     result = client.basicGeneral(image);
