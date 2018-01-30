@@ -41,7 +41,7 @@ def get_ios_img():
 
     # （left, upper, right, lower）
 
-    box = (0, 300, width, newHeight)
+    box = (0, 200, width, newHeight)
     region = img.crop(box)
     region.save(config.IMAGE_PAGE)
 

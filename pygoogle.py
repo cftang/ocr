@@ -39,7 +39,7 @@ def main():
                     developerKey="AIzaSyD1ofgdmWhjp7ySXFlH5WlbS6LoBDIyolk")
     #question, answers = problem_utils.get_result()
 
-    img_utils.get_ios_img();
+    #img_utils.get_ios_img();
 
     question, answers = ocrspace.ocr_space_file(filename=config.IMAGE_PAGE, language='chs')
 
