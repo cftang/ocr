@@ -24,19 +24,19 @@ def get_by_scan():
 	    flag = 2;
 	question = question.replace("?","")
 	'''
-	questionLastLine=len(words)
 	for i in range(0, len(words)):
 		word = words[i]['words']
-		if '/' in word:
+		if '?' in word:
 			questionLastLine = i
 			break
 
 	#选项
-	for i in range(0,questionLastLine):
-		if i < questionLastLine-3:
-			question +=words[i]['words']
-		else:
-			answer.append(words[i]['words'])
+	for i in range(0,len(words)):
+		word = words[i]['words']
+		if i <= questionLastLine:
+			question +=word
+		elif not ('/' in word):
+			answer.append(word)
 			#print u"选项" + str(i - questionLastLine) + u" : " +answer[i - questionLastLine-1]
 
 	question = question.replace("?","")

@@ -28,8 +28,7 @@ if not answers:
 for i in range(0, len(answers)):
     print(u"选项" + str(i + 1) + u" : " + answers[i])
 
-if config.OPEN_BROWSER:
-    solve_utils.open_webpage(question,answers)
+solve_utils.open_webpage_g(question)
 
 # 判断否定
 is_opposite = (question.find(u"不") != -1 or question.find(u"错误") != -1)

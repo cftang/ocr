@@ -19,9 +19,15 @@ headers = {
 
 
 # 直接用浏览器打开问题
-def open_webpage(question):
+def open_webpage(question,answers):
+    for answer in answers:
+        question+=answer
     webbrowser.open('https://baidu.com/s?wd=' + ul.quote(question.encode(sys.stdout.encoding)))
 
+def open_webpage_g(question,answers):
+    for answer in answers:
+        question += answer
+    webbrowser.open('https://baidu.com/s?wd=' + ul.quote(question.encode(sys.stdout.encoding)))
 
 # 根据问题搜索结果计算每个选项出现的次数
 def words_count(question, answers):

@@ -36,7 +36,7 @@ def main():
     # the Google APIs Console <http://code.google.com/apis/console>
     # to get an API key for your own application.
     service = build("customsearch", "v1",
-                    developerKey="AIzaSyD1ofgdmWhjp7ySXFlH5WlbS6LoBDIyolk")
+                    developerKey=config.G_DEVELOPERKEY)
     #question, answers = problem_utils.get_result()
 
     #img_utils.get_ios_img();
@@ -72,7 +72,7 @@ def main():
         q=qa,
         #q='相传我国古代能作“掌上舞”的人是 赵飞燕  貂蝉 杨玉环',
         #q=u'以下哪个人不是中国著名画家 范曾 王世襄 黄永玉',
-        cx='003126706661852603622:bz-lufnkvri',
+        cx=config.G_CX,
     ).execute()
 
     time3 = time.time()

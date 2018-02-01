@@ -25,7 +25,7 @@ def get_ios_img():
     import wda
     from PIL import Image
 
-    c = wda.Client('http://169.254.19.2:8100')  # DEVICE_URL
+    c = wda.Client('http://169.254.79.106:8100')  # DEVICE_URL
     #c = wda.Client('http://192.168.3.11:8100')  # DEVICE_URL
 
     c.screenshot('1.png')
@@ -41,7 +41,10 @@ def get_ios_img():
 
     # （left, upper, right, lower）
 
-    box = (0, 200, width, newHeight)
+    upper = 200
+    if config.MODE == 'koubei':
+        upper = 300
+    box = (0, upper, width, newHeight)
     region = img.crop(box)
     region.save(config.IMAGE_PAGE)
 
@@ -74,7 +77,7 @@ def get_file_content(filePath):
 
 #识别文字
 def spot():
-    #get_ios_img();
+    get_ios_img();
     #crop();
     image = get_file_content(config.IMAGE_PAGE);
     result = client.basicGeneral(image);
