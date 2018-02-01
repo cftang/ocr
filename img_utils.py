@@ -4,11 +4,9 @@
 from aip import AipOcr
 from PIL import ImageGrab
 import config
-import json
 from PIL import Image
 import matplotlib.pyplot as plt
-import datetime
-client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+import tencentOCR
 import os
 
 #通过adb获取android图像
@@ -75,10 +73,33 @@ def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
         return fp.read()
 
-#识别文字
+#识别文字 tencent
+def spot_tencent():
+#def spot():
+    #get_ios_img();
+    #crop();
+    #image = get_file_content(config.IMAGE_PAGE);
+    result = tencentOCR.getText(config.IMAGE_PAGE);
+    return result
+
+#识别文字 baidu
+#def spot_baidu():
 def spot():
     get_ios_img();
     #crop();
     image = get_file_content(config.IMAGE_PAGE);
-    result = client.basicGeneral(image);
+    client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+    #result = client.basicGeneral(image);
+    result = client.basicAccurate(image)['words_result'];
+    ''' 
+    words = []
+
+    for item in result:
+        line = ''
+        for word in item['words']:
+            line += word['character'].encode('iso8859-1').decode('utf-8')
+        #print(line)
+        words.append(line)
+    '''
     return result
+

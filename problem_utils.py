@@ -11,10 +11,11 @@ import time
 def get_by_scan():
 	question = '';
 	answer = [];
-	questionLastLine = 0
+	#questionLastLine = 0
 	#识别文字
-	words = img_utils.spot()['words_result'];
-	isQuestion = True
+	#words = img_utils.spot()['words_result'];
+	words = img_utils.spot()
+	#isQuestion = True
 	#问题
 	'''
 	if len(words) == 4:

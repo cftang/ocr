@@ -3,10 +3,10 @@
 
 import solve_utils
 import problem_utils
-import config
 import time
 import re
 from sys import stdout
+import numpy as np
 
 time_start = time.time()
 
@@ -20,7 +20,7 @@ question, answers = problem_utils.get_result()
 #question = u'可以跳"掌中舞"的美女是谁'
 #answers = [u'貂蝉',u'赵飞燕',u'杨玉环']
 
-print(u"问题 ：" + question)
+print(u"\r\n\r\n--------问题 ：" + question)
 if not answers:
     raise ValueError(u'未能识别出答案选项'.encode(stdout.encoding))
 
@@ -63,7 +63,12 @@ for x in as_completed(futures):
     if is_opposite:
         for i in range(3):
             print(x.result()[i])
+
         minValue=min(x.result())
+
+        print('avg '+str(np.average(np.array(x.result()))))
+        #print(np.std(np.array(x.result())))
+
         for i in range(3):
             if minValue == x.result()[i]:
                 print('choose ----' + str(i+1))
@@ -71,9 +76,14 @@ for x in as_completed(futures):
     else:
         for i in range(3):
             print(x.result()[i])
+
         maxValue=max(x.result())
+
+        print('avg '+str(np.average(np.array(x.result()))))
+        #print(np.std(np.array(x.result())))
+
         for i in range(3):
             if maxValue == x.result()[i]:
                 print('choose ----' + str(i+1))
                 break    
-print(u'耗时：%s s' % (time.time() - time_start))
+print(u'耗时：%s s \r\n\r\n' % (time.time() - time_start))
