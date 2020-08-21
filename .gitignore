@@ -103,3 +103,4 @@ ENV/
 1.png
 img.jpg
 screenshot_backups/*.png
+config.py

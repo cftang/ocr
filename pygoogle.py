@@ -36,10 +36,10 @@ def main():
     # the Google APIs Console <http://code.google.com/apis/console>
     # to get an API key for your own application.
     service = build("customsearch", "v1",
-                    developerKey="AIzaSyD1ofgdmWhjp7ySXFlH5WlbS6LoBDIyolk")
+                    developerKey=config.G_DEVELOPERKEY)
     #question, answers = problem_utils.get_result()
 
-    img_utils.get_ios_img();
+    #img_utils.get_ios_img();
 
     question, answers = ocrspace.ocr_space_file(filename=config.IMAGE_PAGE, language='chs')
 
@@ -58,7 +58,7 @@ def main():
         qa+=' '+str(s)
 
     # 判断否定
-    is_opposite = (str(question).find(u"不") != -1)
+    is_opposite = (str(question).find(u"不") != -1 or str(question).find(u"错误") != -1)
     # 验证否定是否合法
     if is_opposite:
         # 不字前后没有未闭合的双引号或者书名号
@@ -72,7 +72,7 @@ def main():
         q=qa,
         #q='相传我国古代能作“掌上舞”的人是 赵飞燕  貂蝉 杨玉环',
         #q=u'以下哪个人不是中国著名画家 范曾 王世襄 黄永玉',
-        cx='003126706661852603622:bz-lufnkvri',
+        cx=config.G_CX,
     ).execute()
 
     time3 = time.time()
@@ -84,12 +84,31 @@ def main():
         body += s
     #print('item no:' + str(len(res['items'])))
 
-    counts = []
-    for answer in answers:
+    choose = [0, 0, 0]
+    for i in range(0,len(answers)):
+        answer = answers[i]
         num = body.count(answer)
-        counts.append(num)
-        print (answer + " ---> " + str(num))
+        choose[i] = num
+        print (answer + "\t" + str(num))
+
+    minValue = 9
+    maxValue = -9
+
+    if is_opposite:
+        minValue = min(choose)
+        for i in range(3):
+            if minValue == choose[i]:
+                print('choose ---------------' + str(i + 1))
+                break
+    else:
+        maxValue = max(choose)
+        for i in range(3):
+            if maxValue == choose[i]:
+                print('choose ---------------' + str(i + 1))
+                break
+
     time4 = time.time()
+    print()
     print('Elapsed '+str(time4-time1))
     print('Elapsed '+str(time2-time1))
     print('Elapsed '+str(time3-time2))

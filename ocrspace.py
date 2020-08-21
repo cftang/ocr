@@ -95,7 +95,7 @@ def ocr_space_url(url, overlay=False, api_key='helloworld', language='eng'):
 
 
 # Use examples:
-#question,answer = ocr_space_file(filename='img.jpg', language='chs')
+question,answer = ocr_space_file(filename='img.jpg', language='chs')
 #test_url = ocr_space_url(url='http://i.imgur.com/31d5L5y.jpg')
-#print (question)
-#print (answer)
+print (question)
+print (answer)

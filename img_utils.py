@@ -4,11 +4,9 @@
 from aip import AipOcr
 from PIL import ImageGrab
 import config
-import json
 from PIL import Image
 import matplotlib.pyplot as plt
-import datetime
-client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+import tencentOCR
 import os
 
 #通过adb获取android图像
@@ -25,7 +23,7 @@ def get_ios_img():
     import wda
     from PIL import Image
 
-    c = wda.Client('http://169.254.19.2:8100')  # DEVICE_URL
+    c = wda.Client('http://169.254.79.106:8100')  # DEVICE_URL
     #c = wda.Client('http://192.168.3.11:8100')  # DEVICE_URL
 
     c.screenshot('1.png')
@@ -41,7 +39,10 @@ def get_ios_img():
 
     # （left, upper, right, lower）
 
-    box = (0, 300, width, newHeight)
+    upper = 200
+    if config.MODE == 'koubei':
+        upper = 300
+    box = (0, upper, width, newHeight)
     region = img.crop(box)
     region.save(config.IMAGE_PAGE)
 
@@ -72,10 +73,33 @@ def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
         return fp.read()
 
-#识别文字
+#识别文字 tencent
+def spot_tencent():
+#def spot():
+    #get_ios_img();
+    #crop();
+    #image = get_file_content(config.IMAGE_PAGE);
+    result = tencentOCR.getText(config.IMAGE_PAGE);
+    return result
+
+#识别文字 baidu
+#def spot_baidu():
 def spot():
     get_ios_img();
     #crop();
     image = get_file_content(config.IMAGE_PAGE);
-    result = client.basicGeneral(image);
+    client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
+    #result = client.basicGeneral(image);
+    result = client.basicAccurate(image)['words_result'];
+    ''' 
+    words = []
+
+    for item in result:
+        line = ''
+        for word in item['words']:
+            line += word['character'].encode('iso8859-1').decode('utf-8')
+        #print(line)
+        words.append(line)
+    '''
     return result
+
