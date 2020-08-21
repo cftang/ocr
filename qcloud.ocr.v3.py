@@ -7,7 +7,7 @@ from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentClo
 from tencentcloud.ocr.v20181119 import ocr_client, models
 try:
     cred = credential.Credential(
-        "AKIDtakiU04I6e0B6pmYYIm0yjESM6dxsrPh", "A7oFajdR1NXQ2RhiSwEG2buxjFhEagBT")
+        "AKIDDOOAmBOWnyUq0ELNTYZP0W5Tq2ISjDjo", "0gKp38yYprnXAXgaDdmqgPr65nHUeYLs")
 
     httpProfile = HttpProfile()
     httpProfile.endpoint = "ocr.tencentcloudapi.com"
