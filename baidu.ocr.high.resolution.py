@@ -3,6 +3,7 @@
 
 from aip import AipOcr
 import config
+import sys
 
 # 通用文字识别	识别图片中的文字信息 basicGeneralUrl
 # 通用文字识别（高精度版）	更高精度地识别图片中的文字信息 basicAccurate
@@ -23,9 +24,11 @@ def get_file_content(filePath):
 
 
 # 识别文字
-image = get_file_content('D:/BaiduNetdiskDownload/2020-08-20 152830.jpg')
+#image = get_file_content('C:/Users/wisdom/Downloads/xx.jpg')
+image = get_file_content(sys.argv[1])
 
 # 通用文字识别（高精度版）	更高精度地识别图片中的文字信息 basicAccurate
 result = client.basicAccurate(image)
+# print(result)
 for w in result['words_result']:
     print(w['words'])

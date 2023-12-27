@@ -3,6 +3,7 @@
 
 from aip import AipOcr
 import config
+import sys
 
 # 通用文字识别	识别图片中的文字信息 basicGeneralUrl
 # 通用文字识别（高精度版）	更高精度地识别图片中的文字信息 basicAccurate
@@ -19,7 +20,7 @@ def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
         return fp.read()
 
-image = get_file_content('C:/Users/wisdom/Downloads/a30.png');
+image = get_file_content(sys.argv[1]);
 
 """ 调用通用文字识别, 图片参数为本地图片 """
 result = client.basicGeneral(image);
