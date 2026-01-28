@@ -76,6 +76,12 @@ def get_all_concept_stocks():
                 stocks_df['板块名称'] = concept_name
                 stocks_df['板块代码'] = concept_code
                 
+                # 根据股票代码前缀添加市场标识 (SH/SZ/BJ)
+                stocks_df['代码'] = stocks_df['代码'].apply(lambda x: 
+                    'SH' + x if x.startswith(('60', '68', '90')) else 
+                    'SZ' + x if x.startswith(('30', '00')) else 
+                    'BJ' + x if x.startswith('92') else x)
+
                 # 立即追加保存
                 header = not os.path.exists(output_file)
                 stocks_df.to_csv(output_file, mode='a', index=False, header=header, encoding="utf-8-sig")
